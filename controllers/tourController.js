@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
 const checkID = (req, res, next, value) => {
@@ -15,7 +15,7 @@ const checkID = (req, res, next, value) => {
 };
 
 const checkBody = (req, res, next) => {
-  const body = req.body;
+  const { body } = req;
   if (!body.name || !body.price) {
     return res.status(400).json({
       status: 'fail',
@@ -29,7 +29,7 @@ const getAllTours = (req, res) => {
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestTime,
-    results: tours?.length || 0,
+    results: tours.length || 0,
     data: {
       tours,
     },
@@ -38,7 +38,7 @@ const getAllTours = (req, res) => {
 
 const getTour = (req, res) => {
   const id = Number(req.params.id);
-  const tour = tours?.find((tour) => tour.id === id);
+  const tour = tours?.find((currentTour) => currentTour.id === id);
 
   res.status(200).json({
     status: 'success',
@@ -59,7 +59,7 @@ const createTour = (req, res) => {
     JSON.stringify(tours),
     (error) => {
       res.status(201).json({ status: 'success', data: { tour: newTour } });
-    }
+    },
   );
 };
 

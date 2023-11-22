@@ -1,3 +1,9 @@
+const fs = require('fs');
+
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
+);
+
 const checkID = (req, res, next, value) => {
   if (value > tours.length - 1) {
     return res.status(404).json({
