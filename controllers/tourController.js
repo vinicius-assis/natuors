@@ -14,8 +14,6 @@ const getAllTours = async (req, res) => {
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
       query = query.sort(sortBy);
-    } else {
-      query = query.sort('-createdAt');
     }
 
     if (req.query.fields) {
@@ -24,6 +22,12 @@ const getAllTours = async (req, res) => {
     } else {
       query = query.select('-__v');
     }
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 100;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
 
     const tours = await query;
 
